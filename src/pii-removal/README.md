@@ -1,5 +1,8 @@
 # 🛡️ PhishNet - PII Removal / Privacy Compliance
 
+![pii-removal](https://github.com/sirlolcat/PhishNet/assets/85698684/279c7efc-b716-4122-bed7-13a6577df4d9)
+
+
 ## Introduction
 
 As part of our commitment to ethical AI research and development, this module is dedicated to the meticulous removal of any private, sensitive or personally identifiable information (PII) from our datasets. Ensuring privacy and compliance is paramount in our quest to create a high-quality synthetic dataset of phishing emails.
