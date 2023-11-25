@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r transformers requests tqdm kaggle
+          pip install transformers requests tqdm kaggle
           pip install pylint
       - name: Analysing the code with pylint
         run: |
