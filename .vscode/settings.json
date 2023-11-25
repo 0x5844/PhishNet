@@ -1,0 +1,19 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": "always",
+    },
+    "cSpell.words": [
+        "Kaggle",
+        "maxsplit",
+        "ngram",
+        "ozlerhakan",
+        "phishingemails",
+        "rtatman",
+        "subhajournal",
+        "suraj",
+        "tqdm",
+        "venky",
+        "wcukierski"
+    ]
+}
