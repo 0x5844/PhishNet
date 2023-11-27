@@ -1,45 +1,49 @@
 """
-This module downloads various datasets from Kaggle and saves them locally.
+This script downloads various datasets from Kaggle and saves them in the 'data/raw' directory.
 """
 
 import os
-import requests
 from tqdm import tqdm
 from kaggle.api.kaggle_api_extended import KaggleApi
-
-def download_file(url, filename):
-    """
-    Downloads a file from the given URL and saves it to the specified filename.
-    """
-    with requests.get(url, stream=True, timeout=10) as r:  # Added timeout
-        total_length = int(r.headers.get('content-length'))
-        with open(filename, 'wb') as f:
-            for chunk in tqdm(r.iter_content(chunk_size=1024), total=total_length//1024, unit='KB', desc=f'Downloading {filename}'):
-                if chunk:
-                    f.write(chunk)
-if not os.path.exists('datasets'):
-    os.makedirs('datasets')
 
 # Kaggle datasets
 kaggle_datasets = [
     "wcukierski/enron-email-dataset",
     "rtatman/fraudulent-email-corpus",
-    "venky73/spam-mails-dataset",
     "subhajournal/phishingemails",
     "suraj520/customer-support-ticket-dataset",
     "ozlerhakan/spam-or-not-spam-dataset",
 ]
 
-# Initialize Kaggle API
-api = KaggleApi()
-api.authenticate()
+# Function to initialize Kaggle API
+def initialize_kaggle_api():
+    api_instance = KaggleApi()
+    api_instance.authenticate()
+    return api_instance
 
-# Download Kaggle datasets
-for dataset in kaggle_datasets:
-    dataset_key = dataset.rsplit('/', maxsplit=1)[-1]
-    dataset_path = f'datasets/{dataset_key}'
+# Function to download datasets from Kaggle and extract them
+def download_and_extract_dataset(api_instance, dataset_identifier, path='data/raw'):
+    dataset_key = dataset_identifier.split('/')[-1]
+    dataset_path = f'{path}/{dataset_key}'
+
     if not os.path.exists(dataset_path):
-        print(f'Trying to download {dataset_key}...')
-        api.dataset_download_files(dataset, path='datasets', unzip=True, quiet=False)
+        api_instance.dataset_download_files(dataset_identifier, path=path, unzip=True)
+        tqdm.write(f'Dataset {dataset_key} downloaded and extracted in {path}.')
+    else:
+        tqdm.write(f'Dataset {dataset_key} already exists in {path}.')
 
-print("Datasets downloaded and renamed successfully.")
+if __name__ == "__main__":
+    # Initialize Kaggle API
+    api = initialize_kaggle_api()
+
+    # Create 'data/raw' directory if it doesn't exist
+    if not os.path.exists('data/raw'):
+        os.makedirs('data/raw')
+
+    # Download Kaggle datasets
+    with tqdm(total=len(kaggle_datasets), desc='Downloading datasets') as pbar:
+        for dataset in kaggle_datasets:
+            download_and_extract_dataset(api, dataset)
+            pbar.update(1)
+
+    print("All datasets have been downloaded and extracted successfully.")
